@@ -1,0 +1,37 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 환경 변수 — 키·토큰은 여기 넣지 말고 Vercel/로컬 .env*에만 둡니다.
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# 로컬 데이터(제보 JSON 등). `data/` 아래 다른 파일도 실수로 커밋되지 않게 함.
+/data/*
+!/data/.gitkeep
