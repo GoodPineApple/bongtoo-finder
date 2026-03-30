@@ -76,7 +76,7 @@ npm run build:all
 
 ## 배포 (Vercel)
 
-요약은 [`docs/VERCEL.md`](docs/VERCEL.md)를 참고하세요. Vercel 환경 변수에는 최소 **`NEXT_PUBLIC_KAKAO_MAP_APP_KEY`** 와 (제보 유지 시) **Upstash Redis** 연동이 필요합니다.
+요약은 [`docs/VERCEL.md`](docs/VERCEL.md)를 참고하세요. Vercel에서는 디스크에 쓸 수 없으므로 **재고 제보**를 쓰려면 **Upstash Redis**(Storage에서 프로젝트에 연결)가 **필수**입니다. 지도용 **`NEXT_PUBLIC_KAKAO_MAP_APP_KEY`** 도 함께 설정하세요.
 
 ## 기타 문서
 
