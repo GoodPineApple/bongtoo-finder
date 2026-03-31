@@ -74,9 +74,9 @@ npm run build:stores
 npm run build:all
 ```
 
-## 배포 (Vercel)
+## 제보 데이터
 
-요약은 [`docs/VERCEL.md`](docs/VERCEL.md)를 참고하세요. Vercel 환경 변수에는 최소 **`NEXT_PUBLIC_KAKAO_MAP_APP_KEY`** 와 (제보 유지 시) **Upstash Redis** 연동이 필요합니다.
+재고 제보는 **데이터베이스 없이** 서버의 `data/reports.json`에 저장됩니다. Git에는 올라가지 않도록 `.gitignore`에 두었습니다. `next dev`처럼 한 프로세스로 돌릴 때만 유지됩니다.
 
 ## 기타 문서
 
