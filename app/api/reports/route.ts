@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ReportsRedisRequiredError, addReport, listReports } from "@/lib/server/reports";
+import { ReportsStorageNotConfiguredError, addReport, listReports } from "@/lib/server/reports";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     const report = await addReport({ store_id: store_id.trim(), is_available });
     return NextResponse.json({ report });
   } catch (e) {
-    if (e instanceof ReportsRedisRequiredError) {
+    if (e instanceof ReportsStorageNotConfiguredError) {
       return NextResponse.json({ error: e.message }, { status: 503 });
     }
     const message = e instanceof Error ? e.message : "Write failed";

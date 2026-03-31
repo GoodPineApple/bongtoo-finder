@@ -4,23 +4,24 @@
 
 - **빌드**: `vercel.json`에서 `npm run build:all`을 사용합니다. `assets/stores.csv` → `public/data/stores.json` 변환 후 Next 빌드가 실행됩니다.
 - **지도**: 카카오 JavaScript 키와 **배포 URL**(프로덕션·프리뷰)을 [카카오 개발자 콘솔](https://developers.kakao.com) 앱의 **사이트 도메인**에 등록해야 합니다.
-- **제보 API**: Vercel은 **읽기 전용 파일 시스템**이라 `data/reports.json`에 쓸 수 없습니다. **Upstash Redis**(Vercel Storage 연동)는 재고 제보 기능에 **필수**입니다. Redis 없이 배포하면 제보 조회는 빈 목록, 제보 저장은 503 안내가 됩니다.
+- **제보 API**: 로컬·Vercel **동일하게** Redis REST만 사용합니다. Vercel **Storage → KV** 연결 시 자동으로 **`KV_REST_API_URL`**, **`KV_REST_API_TOKEN`** 등이 붙으며, 앱은 이 이름을 우선 인식합니다. Upstash 단독 연동 시에는 `UPSTASH_REDIS_REST_*`도 지원합니다. 로컬은 Vercel 환경 변수 화면에서 위 값을 `.env.local`에 복사하면 됩니다. 미설정 시 제보 조회는 빈 목록, 제보 저장은 503 안내입니다.
 
 ## 절차
 
 1. 저장소를 GitHub 등에 푸시한 뒤 [Vercel](https://vercel.com)에서 **Import** 합니다.
 2. **Environment Variables**에 다음을 설정합니다.
    - `NEXT_PUBLIC_KAKAO_MAP_APP_KEY` — 카카오 JavaScript 키
-3. **(필수)** 프로젝트 **Storage** 탭 → **Create Database** / Marketplace에서 **Redis**(Upstash)를 만들고 **Connect to Project**로 이 프로젝트에 연결합니다. 환경에 `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`이 생기면 재배포 없이도 반영되는 경우가 많습니다(안 되면 **Redeploy**).
-4. 배포가 끝나면 표시된 URL(예: `https://프로젝트.vercel.app`)을 카카오 플랫폼 Web 도메인에 추가합니다.
-5. 프리뷰 배포 URL도 지도 테스트에 필요하면 동일하게 등록합니다(와일드카드가 안 되면 프리뷰마다 추가하거나 프로덕션만 사용).
+3. **(필수)** 프로젝트 **Storage** 탭에서 **KV / Redis**를 만들고 **Connect to Project**로 연결합니다. `KV_REST_API_URL`, `KV_REST_API_TOKEN` 등이 붙은 뒤 필요하면 **Redeploy** 하세요.
+4. **로컬 개발**에서도 제보를 쓰려면 Vercel **Environment Variables**에 보이는 `KV_REST_API_URL`·`KV_REST_API_TOKEN`을 `.env.local`에 **같은 이름으로** 넣으면 배포와 같은 DB를 씁니다.
+5. 배포 URL을 카카오 플랫폼 Web 도메인에 추가합니다.
+6. 프리뷰 URL도 지도·제보 테스트에 쓰면 동일하게 등록합니다.
 
 ## 로컬과의 차이
 
-| 항목        | 로컬                    | Vercel                          |
-|------------|-------------------------|----------------------------------|
-| 판매소 JSON | `build:stores` / 빌드 시 생성 | 동일 (`build:all`)               |
-| 제보 저장   | `data/reports.json`     | **Redis 필수**(파일 쓰기 불가)   |
+| 항목        | 로컬                         | Vercel                    |
+|------------|------------------------------|---------------------------|
+| 판매소 JSON | `build:stores` / 빌드 시 생성 | 동일 (`build:all`)         |
+| 제보 저장   | **Redis** (`.env.local`에 `KV_REST_API_*` 또는 `UPSTASH_REDIS_REST_*`) | **Storage 연동 시 자동** (`KV_REST_API_*` 등) |
 
 ## Node 버전
 

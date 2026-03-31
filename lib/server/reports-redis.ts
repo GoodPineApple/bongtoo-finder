@@ -14,8 +14,33 @@ function withLock<T>(fn: () => Promise<T>): Promise<T> {
   return run;
 }
 
+/**
+ * Vercel Storage → KV 연결 시 자동 주입: `KV_REST_API_URL`, `KV_REST_API_TOKEN`
+ * Upstash 단독/다른 호스트: `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`
+ */
+export function resolveRedisRestConfig(): { url: string; token: string } | null {
+  const candidates: [string | undefined, string | undefined][] = [
+    [process.env.KV_REST_API_URL, process.env.KV_REST_API_TOKEN],
+    [process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN],
+  ];
+  for (const [url, token] of candidates) {
+    const u = url?.trim();
+    const t = token?.trim();
+    if (u && t) return { url: u, token: t };
+  }
+  return null;
+}
+
+export function isReportsRedisConfigured(): boolean {
+  return resolveRedisRestConfig() !== null;
+}
+
 function redis(): Redis {
-  return Redis.fromEnv();
+  const cfg = resolveRedisRestConfig();
+  if (!cfg) {
+    throw new Error("Redis REST URL/TOKEN이 없습니다. KV_REST_API_* 또는 UPSTASH_REDIS_REST_* 를 설정하세요.");
+  }
+  return new Redis({ url: cfg.url, token: cfg.token });
 }
 
 function parseList(raw: unknown): StoredReport[] {

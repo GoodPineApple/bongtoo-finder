@@ -32,6 +32,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-# 로컬 데이터(제보 JSON 등). `data/` 아래 다른 파일도 실수로 커밋되지 않게 함.
+# 로컬 실험용 데이터 등(제보는 Redis 사용, Git에 올리지 않을 파일용)
 /data/*
 !/data/.gitkeep

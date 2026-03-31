@@ -58,7 +58,12 @@
 
 ```bash
 npm install
-cp .env.example .env.local   # 후에 NEXT_PUBLIC_KAKAO_MAP_APP_KEY만 채우면 됩니다.
+cp .env.example .env.local
+```
+
+`.env.local`에는 **`NEXT_PUBLIC_KAKAO_MAP_APP_KEY`**(지도)와 제보용 Redis REST 값을 넣습니다. Vercel KV 연동이면 **`KV_REST_API_URL`**, **`KV_REST_API_TOKEN`**(대시보드 Environment Variables에 보이는 이름 그대로)를 복사하면 되고, Upstash만 쓰면 **`UPSTASH_REDIS_REST_URL`**, **`UPSTASH_REDIS_REST_TOKEN`**을 쓰면 됩니다.
+
+```bash
 npm run dev
 ```
 
@@ -76,7 +81,7 @@ npm run build:all
 
 ## 배포 (Vercel)
 
-요약은 [`docs/VERCEL.md`](docs/VERCEL.md)를 참고하세요. Vercel에서는 디스크에 쓸 수 없으므로 **재고 제보**를 쓰려면 **Upstash Redis**(Storage에서 프로젝트에 연결)가 **필수**입니다. 지도용 **`NEXT_PUBLIC_KAKAO_MAP_APP_KEY`** 도 함께 설정하세요.
+요약은 [`docs/VERCEL.md`](docs/VERCEL.md)를 참고하세요. **재고 제보**는 Redis REST 한 가지 방식이며, Vercel은 Storage 연결 시 붙는 **`KV_REST_API_URL` / `KV_REST_API_TOKEN`**(또는 Upstash **`UPSTASH_REDIS_REST_*`**)를 인식합니다. 로컬은 `.env.local`에 동일한 키·값을 넣으면 됩니다. 지도용 **`NEXT_PUBLIC_KAKAO_MAP_APP_KEY`** 도 필요합니다.
 
 ## 기타 문서
 
